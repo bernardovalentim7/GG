@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light" data-level="0">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>MVV — Missão · Visão · Valores — SIAS IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-tab="mvv">
+<body>
+
+<!-- ═══ LOGIN OVERLAY ═══ -->
+<div id="login-overlay">
+  <div class="login-bg-decor"></div>
+  <div class="login-card">
+    <div class="login-logo">
+      <img src="assets/logo.png" alt="SIAS" style="height:52px;width:auto;display:block;margin:0 auto 10px;">
+      <div class="login-tagline">Centro de Controle Estrat&#x00E9;gico</div>
+    </div>
+    <div class="login-field"><label>Usu&#x00E1;rio</label><input type="text" id="l-user" placeholder="seu.login" autocomplete="username" title="Informe seu login de acesso"></div>
+    <div class="login-field"><label>Senha</label><input type="password" id="l-pass" placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;" autocomplete="current-password" title="Informe sua senha"></div>
+    <div class="login-err" id="l-err">Usu&#x00E1;rio ou senha incorretos.</div>
+    <button class="login-btn" onclick="doLogin()" title="Entrar no sistema">Entrar &#x2192;</button>
+    <div class="login-accounts">
+      <div class="login-accounts-title">Contas dispon&#x00ED;veis (demonstra&#x00E7;&#x00E3;o)</div>
+      <div class="login-account" data-role="admin" onclick="fillLogin(this)" title="Preencher credenciais de Administrador">
+        <div class="la-avatar" style="background:rgba(245,160,35,.15);color:#F5A023;">A</div>
+        <div class="la-info"><div class="la-name">Administrador</div><div class="la-login">admin / sias2026</div></div>
+        <span class="la-level" style="background:rgba(245,160,35,.12);color:#F5A023;">N&#x00ED;vel 3</span>
+      </div>
+      <div class="login-account" data-role="analista" onclick="fillLogin(this)" title="Preencher credenciais de Analista">
+        <div class="la-avatar" style="background:rgba(67,97,238,.15);color:#4361EE;">N</div>
+        <div class="la-info"><div class="la-name">Analista</div><div class="la-login">analista / an2026</div></div>
+        <span class="la-level" style="background:rgba(67,97,238,.12);color:#4361EE;">N&#x00ED;vel 2</span>
+      </div>
+      <div class="login-account" data-role="viewer" onclick="fillLogin(this)" title="Preencher credenciais de Visualizador">
+        <div class="la-avatar" style="background:rgba(16,185,129,.15);color:#10B981;">V</div>
+        <div class="la-info"><div class="la-name">Visualizador</div><div class="la-login">viewer / ver123</div></div>
+        <span class="la-level" style="background:rgba(16,185,129,.12);color:#10B981;">N&#x00ED;vel 1</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ APP ═══ -->
+<div id="app">
+<div class="app">
+<aside class="sidebar">
+  <div class="logo">
+    <img src="assets/logo.png" alt="SIAS" class="logo-img">
+    <div class="ltag" id="logoco">Centro de Controle · v2.0</div>
+  </div>
+  <nav class="nav" id="sidebar-nav">
+    <div class="nsec">VIS&#x00C3;O GERAL</div>
+    <a class="nb" href="dashboard.html" data-tab="dashboard" data-lvl="1" title="Dashboard unificado: financeiro + estrat&#x00E9;gico"><span class="ni">&#x25C8;</span>Dashboard<div class="nd"></div></a>
+    <div class="nsec">ESTRAT&#x00C9;GIA</div>
+    <a class="nb active" href="mvv.html" data-tab="mvv" data-lvl="1" title="Miss&#x00E3;o, Vis&#x00E3;o e Valores da SIAS"><span class="ni">&#x1F9ED;</span>MVV<div class="nd"></div></a>
+    <a class="nb level2-only" href="okrmetas.html" data-tab="okrmetas" data-lvl="2" title="OKRs e Key Results estrat&#x00E9;gicos"><span class="ni">&#x1F3AF;</span>OKRs<div class="nd"></div></a>
+    <a class="nb level2-only" href="iniciativas.html" data-tab="iniciativas" data-lvl="2" title="Iniciativas estrat&#x00E9;gicas e etapas"><span class="ni">&#x1F680;</span>Iniciativas<div class="nd"></div></a>
+    <a class="nb level2-only" href="analise.html" data-tab="analise" data-lvl="2" title="An&#x00E1;lise SWOT e PEST"><span class="ni">&#x1F50D;</span>An&#x00E1;lise<div class="nd"></div></a>
+    <div class="nsec level2-only">FINANCEIRO</div>
+    <a class="nb level2-only" href="findash.html" data-tab="findash" data-lvl="2" title="Dashboard financeiro com proje&#x00E7;&#x00F5;es"><span class="ni">&#x1F4C8;</span>Dashboard Fin.<div class="nd"></div></a>
+    <a class="nb level3-only" href="entradas.html" data-tab="entradas" data-lvl="3" title="Receitas e recebimentos"><span class="ni">&#x2191;</span>Entradas<div class="nd"></div></a>
+    <a class="nb level3-only" href="saidas.html" data-tab="saidas" data-lvl="3" title="Despesas e pagamentos"><span class="ni">&#x2193;</span>Sa&#x00ED;das<div class="nd"></div></a>
+    <a class="nb level3-only" href="plano.html" data-tab="plano" data-lvl="3" title="Plano de contas"><span class="ni">&#x2261;</span>Plano de Contas<div class="nd"></div></a>
+    <div class="nsec">PESSOAS</div>
+    <a class="nb" href="equipe.html" data-tab="equipe" data-lvl="1" title="Equipe e squads"><span class="ni">&#x1F465;</span>Equipe<div class="nd"></div></a>
+    <a class="nb level2-only" href="parceiros.html" data-tab="parceiros" data-lvl="2" title="Parceiros e colaboradores externos"><span class="ni">&#x1F91D;</span>Parceiros<div class="nd"></div></a>
+    <a class="nb level2-only" href="parcdash.html" data-tab="parcdash" data-lvl="2" title="Dashboard centralizado de resultados de parcerias"><span class="ni">&#x1F4CA;</span>Dashboard Parc.<div class="nd"></div></a>
+    <div class="nsec level2-only">CLIENTES</div>
+    <a class="nb level2-only" href="clientes.html" data-tab="clientes" data-lvl="2" title="Carteira de clientes e sa&#x00FA;de das contas"><span class="ni">&#x1F4BC;</span>Clientes<div class="nd"></div></a>
+    <div class="nsec level2-only">CONTABILIDADE</div>
+    <a class="nb level2-only" href="dre.html" data-tab="dre" data-lvl="2" title="DRE e Fluxo de Caixa"><span class="ni">&#x1F4CB;</span>DRE &amp; Fluxo<div class="nd"></div></a>
+    <a class="nb level2-only" href="custos.html" data-tab="custos" data-lvl="2" title="An&#x00E1;lise de custos e margens"><span class="ni">&#x1F9EE;</span>An&#x00E1;lise de Custos<div class="nd"></div></a>
+    <div class="nsec level2-only">RISCOS</div>
+    <a class="nb level2-only" href="riscos.html" data-tab="riscos" data-lvl="2" title="Riscos financeiros, de parceiros e de clientes centralizados"><span class="ni">&#x26A0;</span>Riscos<div class="nd"></div></a>
+    <div class="nsec level3-only">SISTEMA</div>
+    <a class="nb level3-only" href="config.html" data-tab="config" data-lvl="3" title="Configura&#x00E7;&#x00F5;es e prefer&#x00EA;ncias"><span class="ni">&#x2699;</span>Configura&#x00E7;&#x00F5;es<div class="nd"></div></a>
+  </nav>
+  <div class="nav-user" id="nav-user"></div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <div><h1 id="pt">MVV — Missão · Visão · Valores</h1><p id="pd">Fundamentos estratégicos da SIAS IA / VoxCivis · Proposta candidata</p></div>
+    <div id="ta" style="display:flex;gap:8px;align-items:center;"></div>
+  </header>
+  <div class="content">
+
+  <!-- DASHBOARD -->
+  <div id="tab-mvv" class="tab">
+    <div class="mvv-note">&#x26A0;&#xFE0F; <strong>Proposta candidata</strong> &#x2014; MVV precisa ser co-criado com a lideran&#x00E7;a antes de formaliza&#x00E7;&#x00E3;o. <span class="level3-only">Clique em <strong>Editar</strong> nos cards para atualizar os textos.</span></div>
+    <div id="mvv-content"></div>
+  </div>
+
+  <!-- OKRs (SEM METAS FINANCEIRAS) -->
+
+<div id="modal2" class="ov" style="z-index:1002;" onclick="if(event.target===this)closeM2()">
+  <div class="mb mb-wide">
+    <div class="mh"><div><h2 id="m2tit">Editar MVV</h2><p id="m2sub"></p></div>
+      <button class="btn bsm" onclick="closeM2()" style="color:#fff;background:rgba(255,255,255,.1);border:none;" title="Fechar">&#x2715;</button></div>
+    <div class="mbd">
+      <div class="ebox" id="ebox2"></div>
+      <!-- MVV texto -->
+      <div id="m2-mvv-text">
+        <div class="fgr">
+          <div class="fg2 full"><label>Miss&#x00E3;o *</label><textarea id="m2-missao" rows="3"></textarea></div>
+          <div class="fg2 full"><label>Vis&#x00E3;o *</label><textarea id="m2-visao" rows="3"></textarea></div>
+        </div>
+      </div>
+      <!-- MVV valores (lista CRUD) -->
+      <div id="m2-mvv-vals" style="display:none;">
+        <div class="fg2 full" style="margin-bottom:16px;">
+          <label>Valores da empresa (arraste para reordenar)</label>
+          <div class="val-edit-list" id="val-edit-list"></div>
+          <button class="btn bs bsm" onclick="addValorInline()" title="Adicionar novo valor" style="width:100%;justify-content:center;margin-top:4px;">+ Adicionar Valor</button>
+        </div>
+        <div id="val-edit-form" style="display:none;">
+          <div class="fgr">
+            <div class="fg2"><label>&#x00CD;cone (emoji)</label><input type="text" id="val-ico" placeholder="&#x1F4CA;" maxlength="4"></div>
+            <div class="fg2"><label>Nome do Valor *</label><input type="text" id="val-nome" placeholder="Ex: Transpar&#x00EA;ncia"></div>
+            <div class="fg2 full"><label>Descri&#x00E7;&#x00E3;o</label><input type="text" id="val-desc" placeholder="Subtexto..."></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:4px;">
+            <button class="btn bs bsm" onclick="cancelValEdit()" title="Cancelar">Cancelar</button>
+            <button class="btn bp bsm" style="flex:1;" onclick="saveValorEdit()" title="Salvar valor">Salvar Valor</button>
+          </div>
+        </div>
+      </div>
+      <!-- OKR Objetivo -->
+      <div id="m2-obj-fields" style="display:none;">
+        <div class="fgr">
+          <div class="fg2 full"><label>T&#x00ED;tulo do Objetivo *</label><input type="text" id="m2-obj-title" placeholder="Ex: Conquistar tra&#x00E7;&#x00E3;o real no mercado..."></div>
+          <div class="fg2 full"><label>Cor</label><div class="cpk" id="m2-obj-cpk"></div></div>
+        </div>
+      </div>
+      <!-- OKR KR -->
+      <div id="m2-kr-fields" style="display:none;">
+        <div class="fgr">
+          <div class="fg2 full"><label>Texto do Key Result *</label><input type="text" id="m2-kr-label" placeholder="Ex: MRR ao final do ciclo"></div>
+          <div class="fg2"><label>Meta (alvo) *</label><input type="number" id="m2-kr-target" step="any" placeholder="0"></div>
+          <div class="fg2" id="m2-kr-curr-row"><label>Valor atual</label><input type="number" id="m2-kr-curr" step="any" placeholder="0"></div>
+          <div class="fg2 full"><label>Unidade</label>
+            <select id="m2-kr-unit" title="Unidade de medida"><option value="BRL">R$ (Moeda)</option><option value="COUNT">Quantidade</option><option value="PCT">Porcentagem %</option><option value="DAYS">Dias</option><option value="MONTHS">Meses</option><option value="SCORE">Score/Nota</option><option value="BOOL">Sim/N&#x00E3;o</option></select></div>
+          <div class="fg2 full"><label>C&#x00E1;lculo autom&#x00E1;tico</label>
+            <select id="m2-kr-calc" title="C&#x00E1;lculo autom&#x00E1;tico das transa&#x00E7;&#x00F5;es"><option value="">Manual (entrada manual)</option><option value="mrr">MRR (Receita do m&#x00EA;s mais recente)</option><option value="mom">MoM (Crescimento mensal %)</option></select></div>
+          <div class="fg2 full"><label>Inverter (menor = melhor)</label>
+            <div class="stog"><button class="stb" data-v="0" onclick="pickInvert(0)" title="Normal: maior &#x00E9; melhor">Normal</button><button class="stb on" data-v="1" onclick="pickInvert(1)" style="display:none;" title="Invertido: menor &#x00E9; melhor">Menor = Melhor</button></div>
+            <div class="stog" id="m2-kr-invert"><button class="stb on" data-v="0" onclick="pickInvert(0)" title="Normal: maior valor = melhor progresso">Normal</button><button class="stb" data-v="1" onclick="pickInvert(1)" title="Invertido: menor valor = melhor (ex: churn, tempo)">Menor = Melhor</button></div></div>
+          <div class="fg2 full"><label>Nota / Contexto</label><textarea id="m2-kr-note" rows="2"></textarea></div>
+        </div>
+      </div>
+      <div class="mft"><button class="btn bs" onclick="closeM2()" title="Cancelar">Cancelar</button><button class="btn bp" style="flex:1.6;" id="m2-save" onclick="saveM2()" title="Salvar">Salvar</button></div>
+    </div>
+  </div>
+</div>
+
+
+  </div><!-- .content -->
+</div><!-- .main -->
+</div><!-- .app -->
+</div><!-- #app -->
+
+<script src="core.js"></script>
+</body>
+</html>

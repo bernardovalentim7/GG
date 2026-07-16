@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light" data-level="0">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Parceiros — SIAS IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-tab="parceiros">
+<body>
+
+<!-- ═══ LOGIN OVERLAY ═══ -->
+<div id="login-overlay">
+  <div class="login-bg-decor"></div>
+  <div class="login-card">
+    <div class="login-logo">
+      <img src="assets/logo.png" alt="SIAS" style="height:52px;width:auto;display:block;margin:0 auto 10px;">
+      <div class="login-tagline">Centro de Controle Estrat&#x00E9;gico</div>
+    </div>
+    <div class="login-field"><label>Usu&#x00E1;rio</label><input type="text" id="l-user" placeholder="seu.login" autocomplete="username" title="Informe seu login de acesso"></div>
+    <div class="login-field"><label>Senha</label><input type="password" id="l-pass" placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;" autocomplete="current-password" title="Informe sua senha"></div>
+    <div class="login-err" id="l-err">Usu&#x00E1;rio ou senha incorretos.</div>
+    <button class="login-btn" onclick="doLogin()" title="Entrar no sistema">Entrar &#x2192;</button>
+    <div class="login-accounts">
+      <div class="login-accounts-title">Contas dispon&#x00ED;veis (demonstra&#x00E7;&#x00E3;o)</div>
+      <div class="login-account" data-role="admin" onclick="fillLogin(this)" title="Preencher credenciais de Administrador">
+        <div class="la-avatar" style="background:rgba(245,160,35,.15);color:#F5A023;">A</div>
+        <div class="la-info"><div class="la-name">Administrador</div><div class="la-login">admin / sias2026</div></div>
+        <span class="la-level" style="background:rgba(245,160,35,.12);color:#F5A023;">N&#x00ED;vel 3</span>
+      </div>
+      <div class="login-account" data-role="analista" onclick="fillLogin(this)" title="Preencher credenciais de Analista">
+        <div class="la-avatar" style="background:rgba(67,97,238,.15);color:#4361EE;">N</div>
+        <div class="la-info"><div class="la-name">Analista</div><div class="la-login">analista / an2026</div></div>
+        <span class="la-level" style="background:rgba(67,97,238,.12);color:#4361EE;">N&#x00ED;vel 2</span>
+      </div>
+      <div class="login-account" data-role="viewer" onclick="fillLogin(this)" title="Preencher credenciais de Visualizador">
+        <div class="la-avatar" style="background:rgba(16,185,129,.15);color:#10B981;">V</div>
+        <div class="la-info"><div class="la-name">Visualizador</div><div class="la-login">viewer / ver123</div></div>
+        <span class="la-level" style="background:rgba(16,185,129,.12);color:#10B981;">N&#x00ED;vel 1</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ APP ═══ -->
+<div id="app">
+<div class="app">
+<aside class="sidebar">
+  <div class="logo">
+    <img src="assets/logo.png" alt="SIAS" class="logo-img">
+    <div class="ltag" id="logoco">Centro de Controle · v2.0</div>
+  </div>
+  <nav class="nav" id="sidebar-nav">
+    <div class="nsec">VIS&#x00C3;O GERAL</div>
+    <a class="nb" href="dashboard.html" data-tab="dashboard" data-lvl="1" title="Dashboard unificado: financeiro + estrat&#x00E9;gico"><span class="ni">&#x25C8;</span>Dashboard<div class="nd"></div></a>
+    <div class="nsec">ESTRAT&#x00C9;GIA</div>
+    <a class="nb" href="mvv.html" data-tab="mvv" data-lvl="1" title="Miss&#x00E3;o, Vis&#x00E3;o e Valores da SIAS"><span class="ni">&#x1F9ED;</span>MVV<div class="nd"></div></a>
+    <a class="nb level2-only" href="okrmetas.html" data-tab="okrmetas" data-lvl="2" title="OKRs e Key Results estrat&#x00E9;gicos"><span class="ni">&#x1F3AF;</span>OKRs<div class="nd"></div></a>
+    <a class="nb level2-only" href="iniciativas.html" data-tab="iniciativas" data-lvl="2" title="Iniciativas estrat&#x00E9;gicas e etapas"><span class="ni">&#x1F680;</span>Iniciativas<div class="nd"></div></a>
+    <a class="nb level2-only" href="analise.html" data-tab="analise" data-lvl="2" title="An&#x00E1;lise SWOT e PEST"><span class="ni">&#x1F50D;</span>An&#x00E1;lise<div class="nd"></div></a>
+    <div class="nsec level2-only">FINANCEIRO</div>
+    <a class="nb level2-only" href="findash.html" data-tab="findash" data-lvl="2" title="Dashboard financeiro com proje&#x00E7;&#x00F5;es"><span class="ni">&#x1F4C8;</span>Dashboard Fin.<div class="nd"></div></a>
+    <a class="nb level3-only" href="entradas.html" data-tab="entradas" data-lvl="3" title="Receitas e recebimentos"><span class="ni">&#x2191;</span>Entradas<div class="nd"></div></a>
+    <a class="nb level3-only" href="saidas.html" data-tab="saidas" data-lvl="3" title="Despesas e pagamentos"><span class="ni">&#x2193;</span>Sa&#x00ED;das<div class="nd"></div></a>
+    <a class="nb level3-only" href="plano.html" data-tab="plano" data-lvl="3" title="Plano de contas"><span class="ni">&#x2261;</span>Plano de Contas<div class="nd"></div></a>
+    <div class="nsec">PESSOAS</div>
+    <a class="nb" href="equipe.html" data-tab="equipe" data-lvl="1" title="Equipe e squads"><span class="ni">&#x1F465;</span>Equipe<div class="nd"></div></a>
+    <a class="nb level2-only active" href="parceiros.html" data-tab="parceiros" data-lvl="2" title="Parceiros e colaboradores externos"><span class="ni">&#x1F91D;</span>Parceiros<div class="nd"></div></a>
+    <a class="nb level2-only" href="parcdash.html" data-tab="parcdash" data-lvl="2" title="Dashboard centralizado de resultados de parcerias"><span class="ni">&#x1F4CA;</span>Dashboard Parc.<div class="nd"></div></a>
+    <div class="nsec level2-only">CLIENTES</div>
+    <a class="nb level2-only" href="clientes.html" data-tab="clientes" data-lvl="2" title="Carteira de clientes e sa&#x00FA;de das contas"><span class="ni">&#x1F4BC;</span>Clientes<div class="nd"></div></a>
+    <div class="nsec level2-only">CONTABILIDADE</div>
+    <a class="nb level2-only" href="dre.html" data-tab="dre" data-lvl="2" title="DRE e Fluxo de Caixa"><span class="ni">&#x1F4CB;</span>DRE &amp; Fluxo<div class="nd"></div></a>
+    <a class="nb level2-only" href="custos.html" data-tab="custos" data-lvl="2" title="An&#x00E1;lise de custos e margens"><span class="ni">&#x1F9EE;</span>An&#x00E1;lise de Custos<div class="nd"></div></a>
+    <div class="nsec level2-only">RISCOS</div>
+    <a class="nb level2-only" href="riscos.html" data-tab="riscos" data-lvl="2" title="Riscos financeiros, de parceiros e de clientes centralizados"><span class="ni">&#x26A0;</span>Riscos<div class="nd"></div></a>
+    <div class="nsec level3-only">SISTEMA</div>
+    <a class="nb level3-only" href="config.html" data-tab="config" data-lvl="3" title="Configura&#x00E7;&#x00F5;es e prefer&#x00EA;ncias"><span class="ni">&#x2699;</span>Configura&#x00E7;&#x00F5;es<div class="nd"></div></a>
+  </nav>
+  <div class="nav-user" id="nav-user"></div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <div><h1 id="pt">Parceiros</h1><p id="pd">Gestão de parcerias externas · PF e PJ</p></div>
+    <div id="ta" style="display:flex;gap:8px;align-items:center;"></div>
+  </header>
+  <div class="content">
+
+  <!-- DASHBOARD -->
+  <div id="tab-parceiros" class="tab level2-only">
+    <div class="prc-stats" id="prc-stats"></div>
+    <div class="prc-fbar" id="prc-fbar">
+      <span style="font-size:9.5px;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;">Filtrar</span>
+      <select id="pf-type" onchange="renderPartners()" title="Filtrar por tipo"><option value="">Todos os tipos</option><option value="co-branding">Oferta Combinada</option><option value="white-label">White-label / OEM</option><option value="revenue-share">Revenue Share</option><option value="referral">Indicação / Referral</option></select>
+      <select id="pf-status" onchange="renderPartners()" title="Filtrar por status"><option value="">Todos os status</option><option value="active">Ativo</option><option value="negotiating">Em Negociação</option><option value="prospect">Prospecto</option><option value="inactive">Inativo</option></select>
+      <select id="pf-entity" onchange="renderPartners()" title="Filtrar por tipo de pessoa"><option value="">PF + PJ</option><option value="PF">Pessoa Física</option><option value="PJ">Pessoa Jurídica</option></select>
+    </div>
+    <div class="prc-grid" id="prc-grid"></div>
+  </div>
+
+  <!-- DASHBOARD DE PARCERIAS -->
+
+  <div id="modal5" class="ov" style="z-index:1005;" onclick="if(event.target===this)closeM5()">
+    <div class="mb" style="width:580px;">
+      <div class="mh"><div><h2 id="m5tit">Novo Parceiro</h2><p id="m5sub">Preencha os dados do parceiro</p></div>
+        <button class="btn bsm" onclick="closeM5()" style="color:#fff;background:rgba(255,255,255,.1);border:none;">&#x2715;</button></div>
+      <div class="mbd">
+        <div class="ebox" id="ebox5"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="fg2 full"><label>Nome do Parceiro *</label><input type="text" id="m5-name" placeholder="Nome completo ou razão social"></div>
+          <div class="fg2"><label>Tipo de Pessoa</label>
+            <div style="display:flex;gap:8px;margin-top:4px;">
+              <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer;font-weight:600;"><input type="radio" name="m5-entity" value="PJ" checked style="accent-color:var(--orange);"> Pessoa Jurídica (PJ)</label>
+              <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer;font-weight:600;"><input type="radio" name="m5-entity" value="PF" style="accent-color:var(--orange);"> Pessoa Física (PF)</label>
+            </div>
+          </div>
+          <div class="fg2"><label>CNPJ / CPF</label><input type="text" id="m5-doc" placeholder="000.000.000-00"></div>
+          <div class="fg2"><label>Status</label>
+            <select id="m5-status"><option value="active">Ativo</option><option value="negotiating">Em Negociação</option><option value="prospect">Prospecto</option><option value="inactive">Inativo</option></select>
+          </div>
+          <div class="fg2 full" style="border-top:1px solid var(--border);padding-top:12px;margin-top:4px;">
+            <label style="font-size:10px;font-weight:800;color:var(--orange);text-transform:uppercase;letter-spacing:.08em;">Tipo de Parceria *</label>
+            <select id="m5-type" onchange="showPartnerTypeFields(this.value)" style="margin-top:6px;">
+              <option value="">— Selecionar tipo —</option>
+              <option value="co-branding">Oferta Combinada (Co-branding)</option>
+              <option value="white-label">White-label / OEM (Powered by)</option>
+              <option value="revenue-share">Revenue Share por agente/módulo</option>
+              <option value="referral">Indicação / Canal (Referral)</option>
+            </select>
+          </div>
+          <!-- conditional: co-branding -->
+          <div class="fg2 full type-fields" id="tf-co-branding">
+            <label>Produto / Oferta Conjunta</label><input type="text" id="m5-joint" placeholder="Ex: Plataforma de análise política SIAS + VoxCivis">
+          </div>
+          <!-- conditional: white-label -->
+          <div class="fg2 type-fields" id="tf-wl-type"><label>Modelo de Branding</label>
+            <select id="m5-wltype"><option value="white-label">White-label (marca do parceiro)</option><option value="powered-by">Powered by SIAS</option></select>
+          </div>
+          <div class="fg2 type-fields" id="tf-wl-product"><label>Produto Embarcado</label><input type="text" id="m5-wlprod" placeholder="Ex: Observatório Político Regional"></div>
+          <!-- conditional: revenue-share -->
+          <div class="fg2 type-fields" id="tf-rs-pct"><label>% Receita Compartilhada</label><input type="number" id="m5-rspct" min="0" max="100" step="0.5" placeholder="Ex: 20"></div>
+          <div class="fg2 type-fields" id="tf-rs-base"><label>Base de Cálculo</label>
+            <select id="m5-rsbase"><option value="Receita Bruta">Receita Bruta</option><option value="Uso/Consumo">Uso / Consumo</option><option value="Receita Líquida">Receita Líquida</option></select>
+          </div>
+          <div class="fg2 type-fields" id="tf-rs-period"><label>Periodicidade do Repasse</label>
+            <select id="m5-rsperiod"><option value="Mensal">Mensal</option><option value="Trimestral">Trimestral</option><option value="Semestral">Semestral</option></select>
+          </div>
+          <div class="fg2 type-fields" id="tf-rs-modules"><label>Módulos / Agentes Incluídos</label><input type="text" id="m5-rsmod" placeholder="Ex: Agente Monitor + Dashboard Setorial"></div>
+          <!-- conditional: referral -->
+          <div class="fg2 type-fields" id="tf-ref-pct"><label>% Comissão sobre Contrato Fechado</label><input type="number" id="m5-refpct" min="0" max="100" step="0.5" placeholder="Ex: 10"></div>
+          <div class="fg2 type-fields" id="tf-ref-seg"><label>Segmento-Alvo</label><input type="text" id="m5-refseg" placeholder="Ex: Consultorias e executivos seniores"></div>
+          <div class="fg2 full" style="border-top:1px solid var(--border);padding-top:12px;margin-top:4px;">
+            <label style="font-size:10px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.08em;">Resultados da Parceria</label>
+          </div>
+          <div class="fg2"><label>Clientes Captados</label><input type="number" id="m5-clients" min="0" step="1" placeholder="Ex: 12"></div>
+          <div class="fg2"><label>Receita Gerada (R$)</label><input type="number" id="m5-revenue" min="0" step="0.01" placeholder="Ex: 45000"></div>
+          <!-- contact -->
+          <div class="fg2 full" style="border-top:1px solid var(--border);padding-top:12px;margin-top:4px;">
+            <label style="font-size:10px;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:.08em;">Contato Principal</label>
+          </div>
+          <div class="fg2"><label>Nome do Contato</label><input type="text" id="m5-cname" placeholder="Nome e sobrenome"></div>
+          <div class="fg2"><label>E-mail</label><input type="email" id="m5-email" placeholder="contato@parceiro.com"></div>
+          <div class="fg2"><label>Telefone</label><input type="text" id="m5-phone" placeholder="(00) 00000-0000"></div>
+          <div class="fg2"><label>Início da Parceria</label><input type="date" id="m5-start"></div>
+          <div class="fg2 full"><label>Notas / Observações</label><textarea id="m5-notes" rows="3" placeholder="Contexto, condições especiais, histórico..."></textarea></div>
+        </div>
+        <div class="mft"><button class="btn bs" onclick="closeM5()" title="Cancelar">Cancelar</button><button class="btn bp" style="flex:1.5;" onclick="saveM5()" title="Salvar parceiro">Salvar Parceiro</button></div>
+      </div>
+    </div>
+  </div>
+
+
+  </div><!-- .content -->
+</div><!-- .main -->
+</div><!-- .app -->
+</div><!-- #app -->
+
+<script src="core.js"></script>
+</body>
+</html>
