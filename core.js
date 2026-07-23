@@ -2080,7 +2080,12 @@ const CURRENT_TAB=document.body.dataset.tab;
         if(navEl){
           const savedScroll=sessionStorage.getItem('sias-nav-scroll');
           if(savedScroll)navEl.scrollTop=parseInt(savedScroll,10)||0;
-          navEl.addEventListener('scroll',()=>sessionStorage.setItem('sias-nav-scroll',navEl.scrollTop));
+          let navScrollTick=false;
+          navEl.addEventListener('scroll',()=>{
+            if(navScrollTick)return;
+            navScrollTick=true;
+            requestAnimationFrame(()=>{sessionStorage.setItem('sias-nav-scroll',navEl.scrollTop);navScrollTick=false;});
+          });
         }
         return;
       }
