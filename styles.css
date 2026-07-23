@@ -432,9 +432,9 @@ body.edit-mode .sw-add{display:flex;}
 .prc-extra-sub{font-size:11px;color:var(--t3);margin-top:1px;}
 .prc-results{margin-top:10px;padding:12px 14px;border-radius:6px;border:1px solid;}
 .prc-results-hd{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:9px;}
-.prc-metric{flex:1;min-width:100px;}
+.prc-metric{flex:1 1 100px;min-width:0;}
 .prc-metric-lbl{font-size:9px;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px;}
-.prc-metric-val{font-size:18px;font-weight:900;line-height:1.15;}
+.prc-metric-val{font-size:18px;font-weight:900;line-height:1.15;overflow-wrap:anywhere;word-break:break-word;}
 .prc-metric-sub{font-size:10.5px;color:var(--t3);margin-top:2px;}
 .prc-acts{display:flex;gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid var(--border);}
 .prc-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;}
