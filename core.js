@@ -2076,6 +2076,12 @@ const CURRENT_TAB=document.body.dataset.tab;
         renderNavUser();
         applyCfg();
         go(CURRENT_TAB);
+        const navEl=document.getElementById('sidebar-nav');
+        if(navEl){
+          const savedScroll=sessionStorage.getItem('sias-nav-scroll');
+          if(savedScroll)navEl.scrollTop=parseInt(savedScroll,10)||0;
+          navEl.addEventListener('scroll',()=>sessionStorage.setItem('sias-nav-scroll',navEl.scrollTop));
+        }
         return;
       }
     }
