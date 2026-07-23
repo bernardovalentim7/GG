@@ -1574,7 +1574,7 @@ function renderRiscos(){
         <span>${c.status==='churned'?'❌':'⚠'} <b>${escapeHtml(c.name)}</b> · ${cur(c.ticket||0)}</span><span class="badge" style="background:${st.bg};color:${st.c};">${escapeHtml(st.l)}</span>
       </div>`;
     }).join(''):'<div style="text-align:center;padding:20px;color:var(--t3);">Nenhum cliente em risco 🎉</div>'}
-    ${renewSoon.length?`<div style="font-size:11px;font-weight:800;color:var(--t3);margin:14px 0 6px;text-transform:uppercase;">Renovações nos próximos 60 dias</div>${renewSoon.map(x=>`<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px;"><span>📆 ${escapeHtml(x.c.name)} · ${dtf(x.c.renewalDate)}</span><b>em ${x.days}d</b></div>`).join(''):''}
+    ${renewSoon.length?`<div style="font-size:11px;font-weight:800;color:var(--t3);margin:14px 0 6px;text-transform:uppercase;">Renovações nos próximos 60 dias</div>${renewSoon.map(x=>`<div style="display:flex;justify-content:space-between;padding:6px 0;font-size:12px;"><span>📆 ${escapeHtml(x.c.name)} · ${dtf(x.c.renewalDate)}</span><b>em ${x.days}d</b></div>`).join('')}`:''}
   </div>`;
 
   const notes=loadRiskNotes();
