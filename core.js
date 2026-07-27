@@ -251,7 +251,7 @@ function go(tab){
   const ta=document.getElementById('ta');
   if(tab==='entradas')ta.innerHTML=`<button class="btn bp" onclick="openM('entry')" title="Registrar nova entrada">+ Nova Entrada</button>`;
   else if(tab==='saidas')ta.innerHTML=`<button class="btn bn" onclick="openM('exit')" title="Registrar nova saída">+ Nova Saída</button>`;
-  else if(tab==='plano')ta.innerHTML=`<button class="btn bp" onclick="openM('account')" title="Nova conta">+ Nova Conta</button>`;
+  else if(tab==='plano')ta.innerHTML=`<button class="btn bp" onclick="openAcc('')" title="Nova conta">+ Nova Conta</button>`;
   else if(tab==='okrmetas')ta.innerHTML=canEdit()?`<button class="btn bp bsm" onclick="openObjModal(null)" title="Adicionar objetivo estratégico">+ Novo Objetivo</button>`:'';
   else if(tab==='iniciativas')ta.innerHTML=canEditMid()?`<button class="btn bp" onclick="openInitModal(null)" title="Nova iniciativa">+ Nova Iniciativa</button>`:'';
   else if(tab==='analise')ta.innerHTML=canEditMid()?`<button id="btn-edit-analise" class="btn bs bsm" onclick="toggleEditAnalise()" title="Ativar edição">Editar</button>`:'';
