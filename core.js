@@ -338,7 +338,7 @@ function renderMVV(){
             <button class="btn bic bid" onclick="delMVVVal(${i})" title="Remover este valor" style="width:24px;height:24px;font-size:14px;">×</button>
           </div>`:''}
         </div>`).join('')}
-        ${edit?`<div class="mvv-val" style="border:2px dashed var(--border);cursor:pointer;align-items:center;justify-content:center;display:flex;flex-direction:column;gap:6px;min-height:100px;" onclick="openMVVValNew()" title="Adicionar novo valor">
+        ${edit?`<div class="mvv-val" style="border:2px dashed var(--border);cursor:pointer;align-items:center;justify-content:center;display:flex;flex-direction:column;gap:6px;min-height:100px;" onclick="openMVVVals();openMVVValNew()" title="Adicionar novo valor">
           <span style="font-size:28px;color:var(--t3);">+</span>
           <span style="font-size:12px;font-weight:700;color:var(--t3);">Adicionar Valor</span>
         </div>`:''}
