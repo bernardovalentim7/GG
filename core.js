@@ -16,9 +16,9 @@ const STAGES=['Planejamento','Execução','Validação','Entrega'];
 // Use proper authentication (OAuth, LDAP, etc.) in production.
 // Credentials should be stored securely server-side.
 const USERS=[
-  {name:'Administrador',login:'admin',pass:'sias2026',level:3,color:'#F5A023'},
-  {name:'Analista',login:'analista',pass:'an2026',level:2,color:'#4361EE'},
-  {name:'Visualizador',login:'viewer',pass:'ver123',level:1,color:'#10B981'},
+  {name:'Administrador',login:'admin',level:3,color:'#F5A023'},
+  {name:'Analista',login:'analista',level:2,color:'#4361EE'},
+  {name:'Visualizador',login:'viewer',level:1,color:'#10B981'},
 ];
 
 let ctab='dashboard',mmode=null,mid=null,mmode2=null,m2ctx=null,m3ctx=null,m4ctx=null;
@@ -31,8 +31,8 @@ let curStage=0,valEditIdx=-1,selObjColor=OBJ_COLORS[0],selInvert=false;
 let currentUser=null;
 
 function ld(k){try{return JSON.parse(localStorage.getItem(k));}catch{return null;}}
-function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
-function uid(){return Math.random().toString(36).substring(2,11);}
+function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}syncToSupabase(k,v);}
+function uid(){return crypto.randomUUID();}
 function tod(){return new Date().toISOString().split('T')[0];}
 function dtf(s){if(!s)return'';const[y,m,d]=s.split('-');return`${d}/${m}/${y}`;}
 function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
@@ -42,8 +42,19 @@ function getLevel(){return currentUser?currentUser.level:0;}
 function canEdit(){return getLevel()>=3;}
 function canEditMid(){return getLevel()>=2;}
 
-let entries=ld('sias-e')||seedE();
-let exits=ld('sias-s')||seedS();
+const UUID_RE=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+function fixLegacyIds(arr,key){
+  let changed=false;
+  const fixed=arr.map(x=>{if(UUID_RE.test(x.id))return x;changed=true;return{...x,id:uid()};});
+  if(changed){
+    try{localStorage.setItem(key,JSON.stringify(fixed));}catch(e){}
+    setTimeout(()=>syncToSupabase(key,fixed),0);
+  }
+  return fixed;
+}
+
+let entries=fixLegacyIds(ld('sias-e')||seedE(),'sias-e');
+let exits=fixLegacyIds(ld('sias-s')||seedS(),'sias-s');
 let accounts=ld('sias-a')||seedA();
 let cfg=ld('sias-cfg')||{theme:'light',accent:'#F5A023',company:'SIAS',currency:'BRL'};
 let okrData=ld('sias-okrs')||seedOKRs();
@@ -154,25 +165,27 @@ function singleProgress(stage){const s=stage||0;const pct=s===0?8:s===1?35:s===2
 
 // ═══ AUTH ════════════════════════════════════════════════
 function fillLogin(el){
-  // Demo login: extract role from data-role attribute
+  // Preenche apenas o usuario. A senha e digitada pelo operador e validada
+  // no Supabase Auth — nunca embutir credencial no cliente.
   const role=el.getAttribute('data-role');
-  const demoAccounts={admin:{login:'admin',pass:'sias2026'},analista:{login:'analista',pass:'an2026'},viewer:{login:'viewer',pass:'ver123'}};
-  if(!role||!demoAccounts[role])return;
-  const acc=demoAccounts[role];
-  document.getElementById('l-user').value=acc.login;
-  document.getElementById('l-pass').value=acc.pass;
-  doLogin();
+  const meta=USERS.find(u=>u.login===role);
+  if(!meta)return;
+  document.getElementById('l-user').value=meta.login;
+  const pass=document.getElementById('l-pass');
+  pass.value='';
+  pass.focus();
 }
-function doLogin(){
+async function doLogin(){
   const u=document.getElementById('l-user').value.trim();
   const p=document.getElementById('l-pass').value.trim();
-  const user=USERS.find(x=>x.login===u&&x.pass===p);
   const err=document.getElementById('l-err');
-  if(!user){err.classList.add('show');return;}
+  const meta=USERS.find(x=>x.login===u);
+  if(!meta){err.classList.add('show');return;}
+  const{error}=await db.auth.signInWithPassword({email:`${u}@sias.internal`,password:p});
+  if(error){err.classList.add('show');return;}
   err.classList.remove('show');
-  currentUser=user;
-  document.documentElement.dataset.level=user.level;
-  try{sessionStorage.setItem('sias-session',JSON.stringify({login:user.login,level:user.level}));}catch(e){}
+  currentUser=meta;
+  document.documentElement.dataset.level=meta.level;
   document.getElementById('login-overlay').style.display='none';
   document.getElementById('app').style.display='block';
   renderNavUser();
@@ -180,9 +193,9 @@ function doLogin(){
   location.href='dashboard.html';
 }
 function doLogout(){
+  db.auth.signOut();
   currentUser=null;
   document.documentElement.dataset.level=0;
-  sessionStorage.removeItem('sias-session');
   document.getElementById('app').style.display='none';
   document.getElementById('login-overlay').style.display='flex';
   document.getElementById('l-user').value='';
@@ -1495,7 +1508,7 @@ function calcPartnerRisk(){
     return{p,risk};
   }).sort((a,b)=>b.risk-a.risk);
 }
-function loadRiskNotes(){return ld('sias-risk-notes')||[];}
+function loadRiskNotes(){return fixLegacyIds(ld('sias-risk-notes')||[],'sias-risk-notes');}
 function addRiskNote(){
   const ta=document.getElementById('risk-note-input');
   const text=ta.value.trim();
@@ -2060,22 +2073,146 @@ function saveM7(){
 }
 function delSquad(id){if(!confirm('Excluir este squad? Os membros não serão deletados.'))return;squads=squads.filter(s=>s.id!==id);teamMembers=teamMembers.map(m=>m.squadId===id?{...m,squadId:''}:m);sv('sias-squads',squads);sv('sias-members',teamMembers);renderEquipe();}
 
-const CURRENT_TAB=document.body.dataset.tab;
-(function boot(){
-  // Check for existing session
+function showLoadingOverlay(){
+  let el=document.getElementById('sias-loading');
+  if(el)return;
+  el=document.createElement('div');
+  el.id='sias-loading';
+  el.style.cssText='position:fixed;inset:0;background:#0b0b0f;color:#fff;display:flex;align-items:center;justify-content:center;font:600 15px/1.4 "Plus Jakarta Sans",sans-serif;z-index:9999;';
+  el.textContent='Carregando dados...';
+  document.body.appendChild(el);
+}
+function hideLoadingOverlay(){
+  const el=document.getElementById('sias-loading');
+  if(el)el.remove();
+}
+async function replaceTable(table,rows,idKey='id'){
   try{
-    const saved=sessionStorage.getItem('sias-session');
-    if(saved){
-      const s=JSON.parse(saved);
-      const user=USERS.find(u=>u.login===s.login&&u.level===s.level);
+    if(rows.length)await db.from(table).upsert(rows);
+    const ids=rows.map(r=>r[idKey]);
+    const del=ids.length?db.from(table).delete().not(idKey,'in',`(${ids.join(',')})`):db.from(table).delete().not(idKey,'is',null);
+    await del;
+  }catch(e){console.error('replaceTable',table,e);}
+}
+async function wipeAndInsert(table,rows,deleteCol){
+  try{
+    await db.from(table).delete().not(deleteCol,'is',null);
+    if(rows.length)await db.from(table).insert(rows);
+  }catch(e){console.error('wipeAndInsert',table,e);}
+}
+async function syncCfg(c){
+  try{await db.from('app_config').upsert({id:1,data:c});}catch(e){console.error('syncCfg',e);}
+}
+async function syncOkrs(okrData){
+  try{
+    const {objectives,krs}=okrToDb(okrData);
+    await replaceTable('okr_objectives',objectives);
+    await replaceTable('okr_krs',krs);
+  }catch(e){console.error('syncOkrs',e);}
+}
+async function syncInitiatives(inits){
+  try{
+    const mapped=inits.map(initiativeToDb);
+    await Promise.all([
+      replaceTable('initiatives',mapped.map(m=>m.initiative)),
+      wipeAndInsert('initiative_krs',mapped.flatMap(m=>m.krLinks),'initiative_id'),
+    ]);
+  }catch(e){console.error('syncInitiatives',e);}
+}
+async function syncMvv(mvvData){
+  try{
+    const {mvv,values}=mvvToDb(mvvData);
+    await db.from('mvv').upsert(mvv);
+    await replaceTable('mvv_values',values);
+  }catch(e){console.error('syncMvv',e);}
+}
+const SYNC_MAP={
+  'sias-e':v=>replaceTable('entries',v.map(entryToDb)),
+  'sias-s':v=>replaceTable('exits',v.map(exitToDb)),
+  'sias-a':v=>replaceTable('accounts',v.map(accountToDb)),
+  'sias-cfg':v=>syncCfg(v),
+  'sias-okrs':v=>syncOkrs(v),
+  'sias-init':v=>syncInitiatives(v),
+  'sias-swot':v=>wipeAndInsert('swot_items',swotToDb(v),'id'),
+  'sias-pest':v=>wipeAndInsert('pest_items',pestToDb(v),'id'),
+  'sias-mvv':v=>syncMvv(v),
+  'sias-partners':v=>replaceTable('partners',v.map(partnerToDb)),
+  'sias-clients':v=>replaceTable('clients',v.map(clientToDb)),
+  'sias-risk-notes':v=>replaceTable('risk_notes',v.map(riskNoteToDb)),
+  'sias-members':v=>replaceTable('team_members',v.map(memberToDb)),
+  'sias-squads':v=>replaceTable('squads',v.map(squadToDb)),
+};
+function syncToSupabase(k,v){
+  const fn=SYNC_MAP[k];
+  if(!fn)return;
+  try{Promise.resolve(fn(v)).catch(e=>console.error('syncToSupabase',k,e));}catch(e){console.error('syncToSupabase',k,e);}
+}
+async function loadFromSupabase(){
+  try{
+    const [
+      entriesRes,exitsRes,accountsRes,cfgRes,
+      okrObjRes,okrKrRes,initRes,initKrRes,
+      swotRes,pestRes,mvvRes,mvvValRes,
+      clientsRes,partnersRes,squadsRes,membersRes,
+      riskNotesRes,
+    ]=await Promise.all([
+      db.from('entries').select('*'),
+      db.from('exits').select('*'),
+      db.from('accounts').select('*'),
+      db.from('app_config').select('*').eq('id',1).maybeSingle(),
+      db.from('okr_objectives').select('*'),
+      db.from('okr_krs').select('*'),
+      db.from('initiatives').select('*'),
+      db.from('initiative_krs').select('*'),
+      db.from('swot_items').select('*'),
+      db.from('pest_items').select('*'),
+      db.from('mvv').select('*').eq('id',1).maybeSingle(),
+      db.from('mvv_values').select('*'),
+      db.from('clients').select('*'),
+      db.from('partners').select('*'),
+      db.from('squads').select('*'),
+      db.from('team_members').select('*'),
+      db.from('risk_notes').select('*'),
+    ]);
+    if(entriesRes.data?.length)entries=entriesRes.data.map(entryFromDb);
+    if(exitsRes.data?.length)exits=exitsRes.data.map(exitFromDb);
+    if(accountsRes.data?.length)accounts=accountsRes.data.map(accountFromDb);
+    if(cfgRes.data?.data)cfg=cfgRes.data.data;
+    if(okrObjRes.data?.length)okrData=okrFromDb(okrObjRes.data,okrKrRes.data||[]);
+    if(initRes.data?.length)initiatives=initiativesFromDb(initRes.data,initKrRes.data||[]);
+    if(swotRes.data?.length)swotData=swotFromDb(swotRes.data);
+    if(pestRes.data?.length)pestData=pestFromDb(pestRes.data);
+    if(mvvRes.data&&(mvvRes.data.missao||mvvRes.data.visao)||mvvValRes.data?.length)mvvData=mvvFromDb(mvvRes.data,mvvValRes.data||[]);
+    if(clientsRes.data?.length)clients=clientsRes.data.map(clientFromDb);
+    if(partnersRes.data?.length)partners=partnersRes.data.map(partnerFromDb);
+    if(squadsRes.data?.length)squads=squadsRes.data.map(squadFromDb);
+    if(membersRes.data?.length)teamMembers=membersRes.data.map(memberFromDb);
+    if(riskNotesRes.data?.length)try{localStorage.setItem('sias-risk-notes',JSON.stringify(riskNotesRes.data.map(riskNoteFromDb)));}catch(e){}
+  }catch(e){
+    console.error('SIAS: falha ao carregar dados do Supabase, mantendo cache local.',e);
+  }
+}
+
+const CURRENT_TAB=document.body.dataset.tab;
+(async function boot(){
+  // Check for existing Supabase Auth session
+  try{
+    const{data:{session}}=await db.auth.getSession();
+    if(session){
+      const login=session.user.email.split('@')[0];
+      const user=USERS.find(u=>u.login===login);
       if(user){
         currentUser=user;
         document.documentElement.dataset.level=user.level;
         document.getElementById('login-overlay').style.display='none';
         document.getElementById('app').style.display='block';
-        renderNavUser();
-        applyCfg();
-        go(CURRENT_TAB);
+        showLoadingOverlay();
+        loadFromSupabase().then(()=>{
+          hideLoadingOverlay();
+          renderNavUser();
+          applyCfg();
+          go(CURRENT_TAB);
+        });
         const navEl=document.getElementById('sidebar-nav');
         if(navEl){
           const savedScroll=sessionStorage.getItem('sias-nav-scroll');

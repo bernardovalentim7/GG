@@ -25,19 +25,19 @@
     <button class="login-btn" onclick="doLogin()" title="Entrar no sistema">Entrar &#x2192;</button>
     <div class="login-accounts">
       <div class="login-accounts-title">Contas dispon&#x00ED;veis (demonstra&#x00E7;&#x00E3;o)</div>
-      <div class="login-account" data-role="admin" onclick="fillLogin(this)" title="Preencher credenciais de Administrador">
+      <div class="login-account" data-role="admin" onclick="fillLogin(this)" title="Preencher usuário Administrador">
         <div class="la-avatar" style="background:rgba(245,160,35,.15);color:#F5A023;">A</div>
-        <div class="la-info"><div class="la-name">Administrador</div><div class="la-login">admin / sias2026</div></div>
+        <div class="la-info"><div class="la-name">Administrador</div><div class="la-login">admin</div></div>
         <span class="la-level" style="background:rgba(245,160,35,.12);color:#F5A023;">N&#x00ED;vel 3</span>
       </div>
-      <div class="login-account" data-role="analista" onclick="fillLogin(this)" title="Preencher credenciais de Analista">
+      <div class="login-account" data-role="analista" onclick="fillLogin(this)" title="Preencher usuário Analista">
         <div class="la-avatar" style="background:rgba(67,97,238,.15);color:#4361EE;">N</div>
-        <div class="la-info"><div class="la-name">Analista</div><div class="la-login">analista / an2026</div></div>
+        <div class="la-info"><div class="la-name">Analista</div><div class="la-login">analista</div></div>
         <span class="la-level" style="background:rgba(67,97,238,.12);color:#4361EE;">N&#x00ED;vel 2</span>
       </div>
-      <div class="login-account" data-role="viewer" onclick="fillLogin(this)" title="Preencher credenciais de Visualizador">
+      <div class="login-account" data-role="viewer" onclick="fillLogin(this)" title="Preencher usuário Visualizador">
         <div class="la-avatar" style="background:rgba(16,185,129,.15);color:#10B981;">V</div>
-        <div class="la-info"><div class="la-name">Visualizador</div><div class="la-login">viewer / ver123</div></div>
+        <div class="la-info"><div class="la-name">Visualizador</div><div class="la-login">viewer</div></div>
         <span class="la-level" style="background:rgba(16,185,129,.12);color:#10B981;">N&#x00ED;vel 1</span>
       </div>
     </div>
@@ -100,6 +100,9 @@
 </div><!-- .app -->
 </div><!-- #app -->
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="db-client.js"></script>
+<script src="db-map.js"></script>
 <script src="core.js"></script>
 </body>
 </html>
